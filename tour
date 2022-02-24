@@ -2,31 +2,51 @@
 
 using namespace std;
 int a,n,s,k,m,t[100],d[100000][3],max1=99999999,dem,max2;
-bool c[1001][1001];
+bool c[1001][1001],check[1001];
 void backtrack(int i)
 {
-    for(int j=1;j<=n;j++)
-    {
-        if(j==t[a+1])
+    if(c[i][t[a+1]]==1||c[t[a+1]][i]==1)
         {
-            if(c[i][j]==1||c[j][i]==1)
-            {   dem++;cout<<i<<" "<<j<<" "<<dem<<" ";
-                if(j==t[a+1])
-                    {
-                        if(dem<max1) {max1=dem;dem=1;j=t[a];}
-
-
-                    }
-
-
-            }
-              else {backtrack(j+1);}
+            dem++;
+            if(dem<max1)
+                {
+                    max1=dem;
+                    cout<<"max1+="<<max1<<" ";
+                }
+            dem=0;
+            //for(int q=1;q<=n;q++) check[q]=true;check[t[a]]=false;
         }
-        cout<<endl;
+   else for(int j=1;j<=n;j++)
+    {
+       // if(j==t[a+1])
+        //{
+        //if(dem<max1&&dem!=0) {max1=dem;cout<<"max1-="<<max1<<" ";}
+            if(c[i][j]==1||c[j][i]==1)
+            {
+               if(check[j]==true)
+
+               {dem++;
+               //cout<<dem<<endl;
+               check[j]=false;
+               /* if(j==t[a+1])
+                    {
+                        if(dem<max1) {max1=dem;dem=1;cout<<max1;j=t[a];}
+                    }*/
+
+                backtrack(j);
+               }
+            }
+            //else dem;
+              //else {if(c[i][j]==1||c[j][i]==1) backtrack(j+1);}
+        //}
+         //else {if(c[i][j]==1||c[j][i]==1&&j!=i) backtrack(j);}
+         //for(int q=1;q<=n;i++) check[q]=true;
+         //check[i]=false;
+    // cout<<endl;
         //if(dem<max1) {max1=dem;cout<<dem<<endl;dem=0;}
 
     }
-    max2=max2+max1;
+
 }
 int main()
 {
@@ -36,9 +56,18 @@ int main()
     cin>>s;
     for(int i=1;i<=k;i++) cin>>t[i];
     t[k+1]=s;t[0]=s;
+    //for(int i=0;i<=k+1;i++) cout<<t[i]<<" "; cout<<endl;
     for(int i=1;i<=m;i++) {int k,l;cin>>k>>l;c[k][l]=true;} //cin>>m[i][1]>>m[i][2];
-    for(a=0;a<=k+1;a++) backtrack(t[a]);
+    for(a=0;a<=k;a++)
+        {   for(int i=1;i<=n;i++) check[i]=true;
+            dem=0;
+            max1=999999;
+            backtrack(t[a]);
+          //  cout<<"max1="<<max1<<" max2="<<max2<<endl;
+            max2=max1+max2;
+        }
     //backtrack(s);
+    cout<<endl;
     cout<<max2;
     return 0;
 }
